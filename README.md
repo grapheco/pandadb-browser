@@ -1,1 +1,3 @@
 # panda-browser
+
+howto
