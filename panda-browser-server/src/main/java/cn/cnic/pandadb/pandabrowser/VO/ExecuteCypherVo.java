@@ -8,4 +8,5 @@ public class ExecuteCypherVo {
     private String username;
     private String password;
     private String cypher;
+    private String nodeId;
 }

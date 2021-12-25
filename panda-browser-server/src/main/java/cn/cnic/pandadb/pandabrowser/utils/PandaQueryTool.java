@@ -82,12 +82,14 @@ public class PandaQueryTool {
         List<Map<String, Object>> relationsList = new ArrayList<>();
         List<Map<String, Object>> mapDataList = new ArrayList<>();
         Set<String> columns = new HashSet<>();
+        Set<String> retColumns = new HashSet<>();
 
         StatementResult result = null;
+        PandaStatementResult pandaStatementResult = null;
         try {
             result = execute(cypher);
 
-            PandaStatementResult pandaStatementResult = (PandaStatementResult) result;
+            pandaStatementResult = (PandaStatementResult) result;
             long resultAvailableAfter = pandaStatementResult.consume().resultAvailableAfter(TimeUnit.MILLISECONDS);
             long resultConsumedAfter = pandaStatementResult.consume().resultConsumedAfter(TimeUnit.MILLISECONDS);
             ret.put("resultAvailableAfter", resultAvailableAfter);
@@ -100,13 +102,20 @@ public class PandaQueryTool {
         while (result.hasNext()) {
             Record record = result.next();
             Set<String> keys = new HashMap<>(record.asMap()).keySet();
+            retColumns.addAll(keys);
             Map<String, Object> mapData = new HashMap<>();
             mapDataList.add(mapData);
 
             for (String key : keys) {
                 try {
+
                     Path path = record.get(key).asPath();
                     List<Map<String, Object>> datasPath = new ArrayList<>();
+
+                    Map<String, Object> retMapData = new HashMap<>();
+                    retMapData.put("type", "array");
+                    retMapData.put("data", datasPath);
+                    mapData.put(key, retMapData);
 
                     Iterator<Path.Segment> iterator = path.iterator();
                     while (iterator.hasNext()) {
@@ -147,25 +156,45 @@ public class PandaQueryTool {
                         nodesList.add(endMap);
                         datasPath.add(end.asMap());
                     }
-
-                    mapData.put(key, datasPath);
                 } catch (Exception e1) {
                     try {
-                        Node node = record.get(key).asNode();
-                        Map<String, Object> nod = new HashMap<>();
-                        nod.put("id", "" + node.id());
-                        List<String> nodeLabels = new ArrayList<String>();
-                        for (String label : node.labels()) {
-                            nodeLabels.add(label);
-                            columns.add(label);
-                        }
-                        nod.put("labels", nodeLabels);
-                        nod.put("properties", node.asMap());
-                        nodesList.add(nod);
+                        Relationship relationship = record.get(key).asRelationship();
+                        Map<String, Object> rela = new HashMap<>();
+                        rela.put("id", relationship.id());
+                        rela.put("startNode", relationship.startNodeId());
+                        rela.put("endNode", relationship.endNodeId());
+                        rela.put("type", relationship.type());
+                        rela.put("properties", relationship.asMap());
+                        relationsList.add(rela);
 
-                        mapData.put(key, node.asMap());
-                    } catch (Exception e) {
-                        mapData.put(key, record.get(key).asObject());
+                        Map<String, Object> retMapData = new HashMap<>();
+                        retMapData.put("type", "object");
+                        retMapData.put("data", relationship.asMap());
+                        mapData.put(key, retMapData);
+                    } catch (Exception e2) {
+                        try {
+                            Node node = record.get(key).asNode();
+                            Map<String, Object> nod = new HashMap<>();
+                            nod.put("id", "" + node.id());
+                            List<String> nodeLabels = new ArrayList<String>();
+                            for (String label : node.labels()) {
+                                nodeLabels.add(label);
+                                columns.add(label);
+                            }
+                            nod.put("labels", nodeLabels);
+                            nod.put("properties", node.asMap());
+                            nodesList.add(nod);
+
+                            Map<String, Object> retMapData = new HashMap<>();
+                            retMapData.put("type", "object");
+                            retMapData.put("data", node.asMap());
+                            mapData.put(key, retMapData);
+                        } catch (Exception e3) {
+                            Map<String, Object> retMapData = new HashMap<>();
+                            retMapData.put("type", "string");
+                            retMapData.put("data", record.get(key).asString(""));
+                            mapData.put(key, retMapData);
+                        }
                     }
                 }
             }
@@ -185,6 +214,7 @@ public class PandaQueryTool {
         JSONArray results = new JSONArray();
         results.add(resultMap);
         ret.put("results", results);
+        ret.put("columns", retColumns);
         ret.put("mapData", mapDataList);
         return ret;
     }

@@ -27,4 +27,12 @@ public class BrowserServiceImpl implements BrowserService {
         PandaQueryTool pandaQueryTool = new PandaQueryTool(info);
         return pandaQueryTool.getStatistics();
     }
+
+    @Override
+    public Map<String, Object> getOtherRelationByNodeId(ExecuteCypherVo executeCypherVo) {
+        String cypher = String.format("match (n)-[r]-(n2) where id(n) = %s return n,r,n2 limit 25" +
+                "", executeCypherVo.getNodeId());
+        executeCypherVo.setCypher(cypher);
+        return executeCypher(executeCypherVo);
+    }
 }

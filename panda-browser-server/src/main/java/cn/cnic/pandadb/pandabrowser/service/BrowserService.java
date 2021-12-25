@@ -8,4 +8,6 @@ public interface BrowserService {
     Map<String, Object> executeCypher(ExecuteCypherVo executeCypherVo);
 
     Map<String,Object> getStatistics(ExecuteCypherVo executeCypherVo);
+
+    Map<String, Object> getOtherRelationByNodeId(ExecuteCypherVo executeCypherVo);
 }

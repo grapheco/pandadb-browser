@@ -21,6 +21,11 @@ public class BrowserController {
         return browserService.executeCypher(executeCypherVo);
     }
 
+    @PostMapping("/getOtherRelationByNodeId")
+    public Map<String, Object> getOtherRelationByNodeId(ExecuteCypherVo executeCypherVo) {
+        return browserService.getOtherRelationByNodeId(executeCypherVo);
+    }
+
     @PostMapping("/login")
     public Map<String, Object> login(ExecuteCypherVo executeCypherVo) {
         return browserService.getStatistics(executeCypherVo);

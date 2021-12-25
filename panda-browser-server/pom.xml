@@ -14,7 +14,8 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -103,7 +104,7 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
@@ -111,9 +112,8 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                    <skip>false</skip><!--not skip compile test classes-->
                 </configuration>
-            </plugin>
+            </plugin>-->
 
             <!-- 跳过test测试用例的执行 -->
             <plugin>
@@ -128,9 +128,18 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>cn.cnic.pandadb.pandabrowser.PandaBrowserApplication</mainClass>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
         </plugins>
     </build>
 
