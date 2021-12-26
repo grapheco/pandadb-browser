@@ -5,6 +5,7 @@ import cn.cnic.pandadb.pandabrowser.VO.PandadbConnectionInfo;
 import cn.cnic.pandadb.pandabrowser.service.BrowserService;
 import cn.cnic.pandadb.pandabrowser.utils.PandaQueryTool;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -15,7 +16,14 @@ public class BrowserServiceImpl implements BrowserService {
     public Map<String, Object> executeCypher(ExecuteCypherVo executeCypherVo) {
         PandadbConnectionInfo info = new PandadbConnectionInfo(executeCypherVo);
 
+        if (StringUtils.isEmpty(executeCypherVo.getPandadbUrl())) {
+            throw new RuntimeException("pandadbUrl is null");
+        }
+
         PandaQueryTool pandaQueryTool = new PandaQueryTool(info);
+        if (StringUtils.isEmpty(executeCypherVo.getCypher())) {
+            throw new RuntimeException("cypher error");
+        }
         Map<String, Object> dataByCql = pandaQueryTool.getDataByCql(executeCypherVo.getCypher());
 
         return dataByCql;
@@ -23,9 +31,14 @@ public class BrowserServiceImpl implements BrowserService {
 
     @Override
     public Map<String, Object> getStatistics(ExecuteCypherVo executeCypherVo) {
+
+        if (StringUtils.isEmpty(executeCypherVo.getPandadbUrl())) {
+            throw new RuntimeException("pandadbUrl is null");
+        }
+
         PandadbConnectionInfo info = new PandadbConnectionInfo(executeCypherVo);
         PandaQueryTool pandaQueryTool = new PandaQueryTool(info);
-        return pandaQueryTool.getStatistics();
+        return pandaQueryTool.getStatistics2NewDriver(info);
     }
 
     @Override

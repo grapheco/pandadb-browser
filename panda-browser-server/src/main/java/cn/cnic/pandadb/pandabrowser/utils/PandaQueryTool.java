@@ -18,6 +18,14 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class PandaQueryTool {
 
+    private static final Config DEFAULT_CONFIG = Config.build()
+            .withEncryption()
+            .withConnectionTimeout(120, TimeUnit.SECONDS)
+            .withMaxConnectionLifetime(60, TimeUnit.MINUTES)
+            .withMaxConnectionPoolSize(2000)
+            .withConnectionAcquisitionTimeout(20, TimeUnit.SECONDS)
+            .toConfig();
+
     private Driver driver;
     private Session session;
 
@@ -34,44 +42,38 @@ public class PandaQueryTool {
         LocalCacheUtil.set(info.getPandadbUrl(), this.session, 4 * 60 * 60 * 1000);
     }
 
-    private void getDataSource(PandadbConnectionInfo info) {
+    public static Map<String, Object> getStatistics2NewDriver(PandadbConnectionInfo info) {
 
-        Config config = Config.build()
-                .withEncryption()
-                .withConnectionTimeout(120, TimeUnit.SECONDS)
-                .withMaxConnectionLifetime(60, TimeUnit.MINUTES)
-                .withMaxConnectionPoolSize(2000)
-                .withConnectionAcquisitionTimeout(20, TimeUnit.SECONDS)
-                .toConfig();
-        if (info.getUsername() == null) {
-            info.setUsername("");
+        Driver driver = getDriver(info);
+        try {
+            PandaDriver pandaDriver = (PandaDriver) driver;
+            long nodeCount = pandaDriver.getStatistics().allNodes();
+            long relCount = pandaDriver.getStatistics().allRelations();
+
+            scala.collection.immutable.Map<String, Object> nodesCountByLabel = pandaDriver.getStatistics().nodesCountByLabel();
+            Set<String> nodeLabels = new HashSet<>();
+            nodesCountByLabel.keySet().foreach(var -> nodeLabels.add(var));
+
+            scala.collection.immutable.Map<String, Object> relsCountByType = pandaDriver.getStatistics().relsCountByType();
+            Set<String> relTypes = new HashSet<>();
+            relsCountByType.keySet().foreach(var -> relTypes.add(var));
+
+            Map<String, Object> ret = new HashMap<>();
+            ret.put("nodeCount", nodeCount);
+            ret.put("relCount", relCount);
+            ret.put("nodeLabels", nodeLabels);
+            ret.put("relTypes", relTypes);
+            return ret;
+        } finally {
+            closeDriverQuality(driver);
         }
-        if (info.getPassword() == null) {
-            info.setPassword("");
-        }
-        this.driver = GraphDatabase.driver(info.getPandadbUrl(), AuthTokens.basic(info.getUsername(), info.getPassword()), config);
-        this.session = this.driver.session();
     }
 
-    public Map<String, Object> getStatistics() {
-        PandaDriver pandaDriver = (PandaDriver) driver;
-        long nodeCount = pandaDriver.getStatistics().allNodes();
-        long relCount = pandaDriver.getStatistics().allRelations();
-
-        scala.collection.immutable.Map<String, Object> nodesCountByLabel = pandaDriver.getStatistics().nodesCountByLabel();
-        Set<String> nodeLabels = new HashSet<>();
-        nodesCountByLabel.keySet().foreach(var -> nodeLabels.add(var));
-
-        scala.collection.immutable.Map<String, Object> relsCountByType = pandaDriver.getStatistics().relsCountByType();
-        Set<String> relTypes = new HashSet<>();
-        relsCountByType.keySet().foreach(var -> relTypes.add(var));
-
-        Map<String, Object> ret = new HashMap<>();
-        ret.put("nodeCount", nodeCount);
-        ret.put("relCount", relCount);
-        ret.put("nodeLabels", nodeLabels);
-        ret.put("relTypes", relTypes);
-        return ret;
+    public static void closeDriverQuality(Driver driver) {
+        try {
+            driver.close();
+        } catch (Exception ignore) {
+        }
     }
 
     public Map<String, Object> getDataByCql(String cypher) {
@@ -88,8 +90,7 @@ public class PandaQueryTool {
         StatementResult result = null;
         PandaStatementResult pandaStatementResult = null;
         try {
-            result = execute(cypher);
-
+            result = this.session.run(cypher);
             pandaStatementResult = (PandaStatementResult) result;
             long resultAvailableAfter = pandaStatementResult.consume().resultAvailableAfter(TimeUnit.MILLISECONDS);
             long resultConsumedAfter = pandaStatementResult.consume().resultConsumedAfter(TimeUnit.MILLISECONDS);
@@ -220,6 +221,30 @@ public class PandaQueryTool {
         return ret;
     }
 
+    private void getDataSource(PandadbConnectionInfo info) {
+
+        if (info.getUsername() == null) {
+            info.setUsername("");
+        }
+        if (info.getPassword() == null) {
+            info.setPassword("");
+        }
+        this.driver = GraphDatabase.driver(info.getPandadbUrl(), AuthTokens.basic(info.getUsername(), info.getPassword()), DEFAULT_CONFIG);
+        this.session = driver.session();
+    }
+
+    private static Driver getDriver(PandadbConnectionInfo info) {
+
+
+        if (info.getUsername() == null) {
+            info.setUsername("");
+        }
+        if (info.getPassword() == null) {
+            info.setPassword("");
+        }
+        return GraphDatabase.driver(info.getPandadbUrl(), AuthTokens.basic(info.getUsername(), info.getPassword()), DEFAULT_CONFIG);
+    }
+
     /**
      * 过滤重复的node
      *
@@ -233,15 +258,5 @@ public class PandaQueryTool {
         Map<String, Map<String, Object>> ma = new HashMap<>();
         list.forEach(var -> ma.put(var.get("id").toString(), var));
         return new ArrayList<>(ma.values());
-    }
-
-
-    /**
-     * 　* @MethodName:     excute
-     * 　* @Description:    执行Cypher查询
-     */
-    public StatementResult execute(String cql) {
-        StatementResult result = session.run(cql);
-        return result;
     }
 }
