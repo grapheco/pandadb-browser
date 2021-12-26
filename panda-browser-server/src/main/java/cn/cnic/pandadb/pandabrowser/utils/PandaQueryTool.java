@@ -31,6 +31,7 @@ public class PandaQueryTool {
                 getDataSource(info);
             }
         }
+        LocalCacheUtil.set(info.getPandadbUrl(), this.session, 4 * 60 * 60 * 1000);
     }
 
     private void getDataSource(PandadbConnectionInfo info) {
