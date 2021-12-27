@@ -4,5 +4,5 @@
 mvn clean package
 
 # start
-java -jar panda-browser-server-0.0.1.jar
+java -jar target/pandadb-browser-server-0.0.1.jar
 
