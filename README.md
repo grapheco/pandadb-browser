@@ -1,7 +1,7 @@
 # panda-browser
 
-# pabkage
+# package
 cd panda-browser-server
-mvn clean packge
+mvn clean package
 # start
-nohup java -jar panda-browser-server-0.0.0.jar &
+nohup java -jar panda-browser-server-0.0.1.jar &
