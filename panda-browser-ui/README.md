@@ -1,4 +1,3 @@
-# panda-browser-ui
 ## Project setup
 ```
 npm install
