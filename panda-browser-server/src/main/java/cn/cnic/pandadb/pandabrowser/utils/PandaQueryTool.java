@@ -2,7 +2,7 @@ package cn.cnic.pandadb.pandabrowser.utils;
 
 
 import cn.cnic.pandadb.pandabrowser.VO.PandadbConnectionInfo;
-import cn.pandadb.driver.PandaDriver;
+import cn.pandadb.driver.PandaSession;
 import cn.pandadb.driver.PandaStatementResult;
 import com.alibaba.fastjson.JSONArray;
 import lombok.extern.slf4j.Slf4j;
@@ -42,38 +42,26 @@ public class PandaQueryTool {
         LocalCacheUtil.set(info.getPandadbUrl(), this.session, 4 * 60 * 60 * 1000);
     }
 
-    public static Map<String, Object> getStatistics2NewDriver(PandadbConnectionInfo info) {
+    public Map<String, Object> getStatistics() {
+        PandaSession pandaSession = (PandaSession) session;
+        long nodeCount = pandaSession.getStatistics().allNodes();
+        long relCount = pandaSession.getStatistics().allRelations();
 
-        Driver driver = getDriver(info);
-        try {
-            PandaDriver pandaDriver = (PandaDriver) driver;
-            long nodeCount = pandaDriver.getStatistics().allNodes();
-            long relCount = pandaDriver.getStatistics().allRelations();
+        scala.collection.immutable.Map<String, Object> nodesCountByLabel = pandaSession.getStatistics().nodesCountByLabel();
+        Set<String> nodeLabels = new HashSet<>();
+        nodesCountByLabel.keySet().foreach(var -> nodeLabels.add(var));
 
-            scala.collection.immutable.Map<String, Object> nodesCountByLabel = pandaDriver.getStatistics().nodesCountByLabel();
-            Set<String> nodeLabels = new HashSet<>();
-            nodesCountByLabel.keySet().foreach(var -> nodeLabels.add(var));
+        scala.collection.immutable.Map<String, Object> relsCountByType = pandaSession.getStatistics().relsCountByType();
+        Set<String> relTypes = new HashSet<>();
+        relsCountByType.keySet().foreach(var -> relTypes.add(var));
 
-            scala.collection.immutable.Map<String, Object> relsCountByType = pandaDriver.getStatistics().relsCountByType();
-            Set<String> relTypes = new HashSet<>();
-            relsCountByType.keySet().foreach(var -> relTypes.add(var));
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("nodeCount", nodeCount);
+        ret.put("relCount", relCount);
+        ret.put("nodeLabels", nodeLabels);
+        ret.put("relTypes", relTypes);
+        return ret;
 
-            Map<String, Object> ret = new HashMap<>();
-            ret.put("nodeCount", nodeCount);
-            ret.put("relCount", relCount);
-            ret.put("nodeLabels", nodeLabels);
-            ret.put("relTypes", relTypes);
-            return ret;
-        } finally {
-            closeDriverQuality(driver);
-        }
-    }
-
-    public static void closeDriverQuality(Driver driver) {
-        try {
-            driver.close();
-        } catch (Exception ignore) {
-        }
     }
 
     public Map<String, Object> getDataByCql(String cypher) {
@@ -231,18 +219,6 @@ public class PandaQueryTool {
         }
         this.driver = GraphDatabase.driver(info.getPandadbUrl(), AuthTokens.basic(info.getUsername(), info.getPassword()), DEFAULT_CONFIG);
         this.session = driver.session();
-    }
-
-    private static Driver getDriver(PandadbConnectionInfo info) {
-
-
-        if (info.getUsername() == null) {
-            info.setUsername("");
-        }
-        if (info.getPassword() == null) {
-            info.setPassword("");
-        }
-        return GraphDatabase.driver(info.getPandadbUrl(), AuthTokens.basic(info.getUsername(), info.getPassword()), DEFAULT_CONFIG);
     }
 
     /**

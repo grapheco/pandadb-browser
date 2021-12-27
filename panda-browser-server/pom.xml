@@ -59,7 +59,7 @@
             <artifactId>panda-driver</artifactId>
             <version>0.3.2</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/lib/pandadb-driver-v0.3.2.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/lib/pandadb-driver-v0.3-20211227.jar</systemPath>
             <exclusions>
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>

@@ -38,7 +38,7 @@ public class BrowserServiceImpl implements BrowserService {
 
         PandadbConnectionInfo info = new PandadbConnectionInfo(executeCypherVo);
         PandaQueryTool pandaQueryTool = new PandaQueryTool(info);
-        return pandaQueryTool.getStatistics2NewDriver(info);
+        return pandaQueryTool.getStatistics();
     }
 
     @Override
