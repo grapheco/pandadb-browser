@@ -5,9 +5,9 @@
     <packaging>pom</packaging>
     <groupId>cn.cnic.pandadb</groupId>
     <artifactId>pandadb-browser-server</artifactId>
-    <name>panda-browser-server</name>
+    <name>pandadb-browser-server</name>
     <version>0.0.1</version>
-    <description>panda-browser-server</description>
+    <description>pandadb-browser-server</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -27,6 +27,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <version>2.1.5.RELEASE</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -43,6 +44,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.1.5.RELEASE</version>
             <!--<exclusions>
                 <exclusion>
                     <groupId>org.jboss.logging</groupId>
@@ -60,7 +62,7 @@
 
         <dependency>
             <groupId>cn.cnic.pandadb</groupId>
-            <artifactId>panda-driver</artifactId>
+            <artifactId>pandadb-driver</artifactId>
             <version>0.3.2</version>
             <scope>system</scope>
             <systemPath>${basedir}/src/main/resources/lib/pandadb-driver-v0.3-20211227.jar</systemPath>
@@ -93,6 +95,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.1.5.RELEASE</version>
             <scope>test</scope>
         </dependency>
 

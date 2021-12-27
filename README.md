@@ -11,10 +11,10 @@ npm install pm2 -g
 ```
 # start
 ```
-cd panda-browser-server
+cd server
 nohup java -jar panda-browser-server-0.0.1.jar &
 
-cd panda-browser-ui
+cd ui
 pm2 start ./bin/www --name=panda-browser-ui
 ```
 
