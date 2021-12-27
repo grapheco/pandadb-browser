@@ -1,5 +1,4 @@
-# neo4j-pdb
-
+# panda-browser-ui
 ## Project setup
 ```
 npm install
@@ -10,20 +9,9 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Using PM2 daemon node process
 ```
-npm run build
+npm install pm2 -g
+cd panda-browser-ui
+pm2 start ./bin/www --name=panda-browser-ui
 ```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

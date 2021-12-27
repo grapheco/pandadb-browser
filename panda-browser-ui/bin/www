@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+const http = require('http');
+const app = require('../server/index')
+const { port } = require('../config')
+
+// 创建服务
+const server = http.createServer(app);
+server.listen(port)
+server.on('error', function () {
+    console.log("service startup failed！");
+});
+server.on('listening', function () {
+    console.log(`server listening at http://localhost:${port}`);
+});
