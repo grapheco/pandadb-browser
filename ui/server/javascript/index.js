@@ -10,9 +10,9 @@ app.use(history());
 const compression = require('compression')
 app.use(compression());
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+// const bodyParser = require('body-parser');
+// app.use(bodyParser.json({ limit: '50mb' }));
+// app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 for (const key in proxy) {
     app.use(key,
