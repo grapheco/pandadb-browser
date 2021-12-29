@@ -1,13 +1,13 @@
-package cn.cnic.pandadb.pandabrowser;
+package cn.pandadb.browser;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PandaBrowserApplication {
+public class PandadbBrowserApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PandaBrowserApplication.class, args);
+        SpringApplication.run(PandadbBrowserApplication.class, args);
     }
 
 }

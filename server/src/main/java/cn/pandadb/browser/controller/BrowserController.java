@@ -1,13 +1,15 @@
-package cn.cnic.pandadb.pandabrowser.controller;
+package cn.pandadb.browser.controller;
 
-import cn.cnic.pandadb.pandabrowser.VO.ExecuteCypherVo;
-import cn.cnic.pandadb.pandabrowser.service.BrowserService;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.Map;
+import cn.pandadb.browser.VO.ExecuteCypherVo;
+import cn.pandadb.browser.service.BrowserService;
 
 @RestController
 @RequestMapping("/pandadb/browser")

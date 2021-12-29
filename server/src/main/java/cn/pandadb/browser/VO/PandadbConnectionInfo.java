@@ -1,4 +1,4 @@
-package cn.cnic.pandadb.pandabrowser.VO;
+package cn.pandadb.browser.VO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

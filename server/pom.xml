@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>cn.cnic.pandadb</groupId>
+    <groupId>pandadb</groupId>
     <artifactId>pandadb-browser-server</artifactId>
     <name>pandadb-browser-server</name>
     <version>0.0.1</version>
@@ -116,7 +116,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.1.5.RELEASE</version>
                 <configuration>
-                    <mainClass>cn.cnic.pandadb.pandabrowser.PandaBrowserApplication</mainClass>
+                    <mainClass>cn.pandadb.browser.PandadbBrowserApplication</mainClass>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
                 <executions>

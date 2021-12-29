@@ -1,18 +1,20 @@
-package cn.cnic.pandadb.pandabrowser.service;
+package cn.pandadb.browser.service;
 
-import cn.cnic.pandadb.pandabrowser.PandaBrowserApplication;
-import cn.cnic.pandadb.pandabrowser.VO.ExecuteCypherVo;
-import com.alibaba.fastjson.JSONObject;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Map;
+import com.alibaba.fastjson.JSONObject;
 
-@SpringBootTest(classes = PandaBrowserApplication.class)
+import cn.pandadb.browser.PandadbBrowserApplication;
+import cn.pandadb.browser.VO.ExecuteCypherVo;
+import lombok.extern.slf4j.Slf4j;
+
+@SpringBootTest(classes = PandadbBrowserApplication.class)
 @RunWith(SpringRunner.class)
 @Slf4j
 public class BrowserServiceTest {
