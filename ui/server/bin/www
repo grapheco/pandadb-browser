@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const http = require('http');
-const app = require('../server/index')
-const { port } = require('../config')
+const app = require('../javascript/index')
+const { port } = require('../../config')
 
 // 创建服务
 const server = http.createServer(app);

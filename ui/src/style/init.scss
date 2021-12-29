@@ -1,0 +1,75 @@
+ul,
+ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+body {
+    font-family: "Open Sans", HelveticaNeue-Light, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial,
+        sans-serif;
+    margin: 0;
+}
+.show-enter-active {
+    transition: all 0.25s ease-in;
+}
+.show-enter,
+.show-leave-to {
+    /* transform: scale(0.9); */
+    opacity: 0;
+    margin-top: -6px;
+}
+.show-enter-to,
+.show-leave {
+    opacity: 1;
+    /* transform: scale(1); */
+    margin-top: 0px;
+}
+/*滚动条样式*/
+::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width: 3px;
+    /*高宽分别对应横竖滚动条的尺寸*/
+    height: 10px;
+    color: #efefef;
+    /* display: none; */
+}
+
+::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 0px;
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #30333a3f;
+}
+
+::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    background: #efefef;
+}
+
+.fa-spinner,
+.fa-circle-o-notch {
+    animation: haha1 1s linear infinite;
+}
+@keyframes haha1 {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(90deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    75% {
+        transform: rotate(270deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

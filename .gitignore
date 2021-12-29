@@ -26,5 +26,5 @@ hs_err_pid*
 
 target
 .idea
-server/src/main/resources/lib
 nohup.out
+ui/dist
