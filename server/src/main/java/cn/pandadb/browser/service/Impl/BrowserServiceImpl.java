@@ -1,13 +1,14 @@
-package cn.cnic.pandadb.pandabrowser.service.Impl;
+package cn.pandadb.browser.service.Impl;
 
-import cn.cnic.pandadb.pandabrowser.VO.ExecuteCypherVo;
-import cn.cnic.pandadb.pandabrowser.VO.PandadbConnectionInfo;
-import cn.cnic.pandadb.pandabrowser.service.BrowserService;
-import cn.cnic.pandadb.pandabrowser.utils.PandaQueryTool;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Map;
+import cn.pandadb.browser.VO.ExecuteCypherVo;
+import cn.pandadb.browser.VO.PandadbConnectionInfo;
+import cn.pandadb.browser.service.BrowserService;
+import cn.pandadb.browser.utils.PandaQueryTool;
 
 @Service
 public class BrowserServiceImpl implements BrowserService {

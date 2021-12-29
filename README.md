@@ -11,9 +11,9 @@ npm run build
 ```
 # test
 ```sh
+nohup java -jar server/target/pandadb-browser-server-0.0.1.jar &
 cd ui
 npm run serve
-java -jar ../server/target/pandadb-browser-server-0.0.1.jar
 ```
 Open url: http://localhost:9633
 # deploy
