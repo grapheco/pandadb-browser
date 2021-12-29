@@ -1,4 +1,4 @@
-package cn.cnic.pandadb.pandabrowser.utils;
+package cn.pandadb.browser.utils;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
