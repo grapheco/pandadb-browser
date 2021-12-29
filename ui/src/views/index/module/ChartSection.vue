@@ -58,10 +58,7 @@
 import GraphChart from "./GraphChart.vue";
 import TableText from "./TableText.vue";
 import TextModul from "./TextModul.vue";
-import JsonViewer from "./JsonViewer.vue";
-// import TableText from ".";
-// import Neo4jd3Data from "../../../json/neo4jData.json";
-// import Neo4jd3Data1 from "../../../json/neo4jData1.json";
+import JsonViewer from "./JsonViewer.vue"; 
 import exportCsv from "@/utils/csv.js";
 export default {
   name: "ChartSection",
@@ -70,8 +67,7 @@ export default {
     return {
       active: "Graph",
       isStretch: true,
-      isFullScreen: false,
-      // data: Neo4jd3Data,
+      isFullScreen: false, 
     };
   },
   props: ["data", "length"],
@@ -106,7 +102,7 @@ export default {
     },
     handleRefresh() {
       let graphChart = this.$refs.graphChart;
-      if (graphChart) graphChart.initNeo4jd3();
+      if (graphChart) graphChart.initPdbd3();
     },
   },
   created() {

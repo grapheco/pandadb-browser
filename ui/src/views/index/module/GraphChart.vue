@@ -28,7 +28,7 @@
       @click="isNodeClick = false"
       :style="{ cursor: isZoom ? 'move' : '' }"
     >
-      <div ref="neo4jd3"></div>
+      <div ref="pdbd3"></div>
       <!-- <svg class="svg" ref="svg" height="600"></svg> -->
 
       <div class="search-minu">
@@ -70,7 +70,7 @@
 
 <script>
 // import initChart from "@/graph/index.js";
-import Neo4jd3 from "@/graph/neo4jd3.js";
+import Pdbd3 from "@/graph/pdbd3.js";
 import svg from "../../../svg/index";
 
 export default {
@@ -101,7 +101,7 @@ export default {
       //   {
       //     class: "Project",
       //     property: "name",
-      //     value: "neo4jd3",
+      //     value: "pdbd3",
       //   },
       //   {
       //     class: "User",
@@ -113,7 +113,7 @@ export default {
         show: true,
       },
       infoPanel: false,
-      neo4jData: JSON.parse(JSON.stringify(this.data || "{}")),
+      pdbData: JSON.parse(JSON.stringify(this.data || "{}")),
       minCollision: 60,
       nodeRadius: 20,
 
@@ -125,7 +125,7 @@ export default {
           this.loginData = JSON.parse(loginData);
         }
 
-        // let { nodes, relationships } = this.Neo4jd3.getGraphData();
+        // let { nodes, relationships } = this.Pdbd3.getGraphData();
         // console.log(nodes);
         this.$axios
           .post(
@@ -175,13 +175,13 @@ export default {
             });
             // console.log({ nodes, relationships });
             // console.log(res.data);
-            this.Neo4jd3.updateWithNeo4jData(res.data);
+            this.Pdbd3.updateWithPdbData(res.data);
           });
 
         // // var maxNodes = 5,
-        // let data = this.Neo4jd3.randomD3Data(node, 5);
+        // let data = this.Pdbd3.randomD3Data(node, 5);
         // console.log(data);
-        // this.Neo4jd3.updateWithD3Data({});
+        // this.Pdbd3.updateWithD3Data({});
       },
       onNodeClick: (d) => {
         this.isNodeClick = false;
@@ -209,21 +209,21 @@ export default {
     };
     this.onMouseLeave();
 
-    this.$mitt.on("on-config", this.initNeo4jd3);
+    this.$mitt.on("on-config", this.initPdbd3);
   },
   mounted() {
     if (this.data) {
-      this.Neo4jd3 = new Neo4jd3(this.$refs.neo4jd3, this.option);
-      this.content = this.Neo4jd3.getGraphData();
+      this.Pdbd3 = new Pdbd3(this.$refs.pdbd3, this.option);
+      this.content = this.Pdbd3.getGraphData();
       this.handleColumnsData(this.content || {});
       this.handleLinkTypeData(this.content || {});
       this.onMouseLeave();
     }
   },
   methods: {
-    initNeo4jd3(option) {
+    initPdbd3(option) {
       option = option || this.$store.state.config;
-      this.Neo4jd3.init(this.$refs.neo4jd3, {
+      this.Pdbd3.init(this.$refs.pdbd3, {
         ...this.option,
         isZoom: this.isZoom,
         ...option,
@@ -231,7 +231,7 @@ export default {
     },
     handleOpenZoom(e) {
       this.isZoom = !this.isZoom;
-      this.initNeo4jd3();
+      this.initPdbd3();
     },
     onMouseEnter(d) {
       if (!this.isNodeClick) {
@@ -262,8 +262,8 @@ export default {
     },
     onMouseLeave() {
       if (!this.isNodeClick) {
-        if (this.Neo4jd3) {
-          let { nodes, relationships } = this.Neo4jd3.getGraphData();
+        if (this.Pdbd3) {
+          let { nodes, relationships } = this.Pdbd3.getGraphData();
           this.mouseover = {
             nodes,
             links: relationships,
@@ -336,7 +336,7 @@ export default {
     },
   },
   beforeDestroy() {
-    this.$mitt.off("on-config", this.initNeo4jd3);
+    this.$mitt.off("on-config", this.initPdbd3);
   },
 };
 </script>
@@ -361,21 +361,21 @@ export default {
 } */
 }
 
-.neo4jd3 {
-  .neo4jd3-info {
+.pdbd3 {
+  .pdbd3-info {
     display: none;
   }
-  .neo4jd3-graph {
+  .pdbd3-graph {
     // border: 1px solid #ddd;
     border-radius: 5px;
   }
 
-  .neo4jd3-info {
+  .pdbd3-info {
     font-size: 16px;
     padding: 10px;
     position: absolute;
   }
-  .neo4jd3-info a {
+  .pdbd3-info a {
     border: 1px solid;
     display: inline-block;
     font-size: 14px;
@@ -383,20 +383,20 @@ export default {
     margin-top: 5px;
     padding: 6px 12px;
   }
-  .neo4jd3-info a.class {
+  .pdbd3-info a.class {
     color: white;
   }
-  .neo4jd3-info a.property {
+  .pdbd3-info a.property {
     background-color: #fff;
     border-color: #ccc;
     color: #333;
   }
-  .neo4jd3-info a.btn {
+  .pdbd3-info a.btn {
     margin-left: 5px;
     margin-top: 5px;
     opacity: 1;
   }
-  .neo4jd3-info a.info {
+  .pdbd3-info a.info {
     background-color: #a5abb6;
     border: 1px solid #9aa1ac;
     color: white;
@@ -532,7 +532,7 @@ export default {
     position: relative;
     background-color: rgb(249, 251, 253);
     svg,
-    .neo4jd3 {
+    .pdbd3 {
       width: 100%;
       height: 100%;
       user-select: none;

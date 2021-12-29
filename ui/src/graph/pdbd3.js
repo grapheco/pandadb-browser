@@ -1,4 +1,4 @@
-const Neo4jD3 = (_selector, _options) => {
+const PdbD3 = (_selector, _options) => {
     var container, graph, info, node, nodes, relationship, relationshipOutline, relationshipOverlay, relationshipText, relationships, selector, simulation, svg, svgNodes, svgRelationships, svgScale, svgTranslate,
         classes2colors = {},
         justLoaded = false,
@@ -13,8 +13,8 @@ const Neo4jD3 = (_selector, _options) => {
             images: undefined,
             infoPanel: true,
             minCollision: undefined,
-            neo4jData: undefined,
-            neo4jDataUrl: undefined,
+            pdbData: undefined,
+            pdbDataUrl: undefined,
             nodeOutlineFillColor: undefined,
             nodeRadius: 25,
             relationshipColor: '#a5abb6',
@@ -52,7 +52,7 @@ const Neo4jD3 = (_selector, _options) => {
         svg = container.append('svg')
             .attr('width', '100%')
             .attr('height', '100%')
-            .attr('class', 'neo4jd3-graph')
+            .attr('class', 'pdbd3-graph')
 
         // .on('mousemove', function () {
         //     if (info) {
@@ -103,7 +103,7 @@ const Neo4jD3 = (_selector, _options) => {
 
     function appendInfoPanel(container) {
         return container.append('div')
-            .attr('class', 'neo4jd3-info');
+            .attr('class', 'pdbd3-info');
     }
 
     function appendInfoElement(cls, isNode, property, value) {
@@ -264,10 +264,10 @@ const Neo4jD3 = (_selector, _options) => {
             .attr('y', function (d) {
                 return icon(d) ? (parseInt(Math.round(options.nodeRadius * 0.32)) + 'px') : '4px';
             })
-            .html(function (d) { 
+            .html(function (d) {
                 var _icon = icon(d);
                 let name = d.name || d.properties.name
-                if (name) { 
+                if (name) {
                     name = name.toString()
                     name = name.slice(0, parseInt(options.nodeRadius / 4)) + '...'
                 }
@@ -277,7 +277,7 @@ const Neo4jD3 = (_selector, _options) => {
 
     function appendRandomDataToNode(d, maxNodesToGenerate) {
         var data = randomD3Data(d, maxNodesToGenerate);
-        updateWithNeo4jData(data);
+        updateWithPdbData(data);
     }
 
     function appendRelationship() {
@@ -367,35 +367,12 @@ const Neo4jD3 = (_selector, _options) => {
         info.html('');
     }
 
-    function color() {
-        return options.colors[options.colors.length * Math.random() << 0];
-    }
+    // function color() {
+    //     return options.colors[options.colors.length * Math.random() << 0];
+    // }
 
     function colors() {
-        // d3.schemeCategory10,
-        // d3.schemeCategory20,
-        return [
-            '#68bdf6', // light blue
-            '#6dce9e', // green #1
-            '#faafc2', // light pink
-            '#f2baf6', // purple
-            '#ff928c', // light red
-            '#fcea7e', // light yellow
-            '#ffc766', // light orange
-            '#405f9e', // navy blue
-            '#a5abb6', // dark gray
-            '#78cecb', // green #2,
-            '#b88cbb', // dark purple
-            '#ced2d9', // light gray
-            '#e84646', // dark red
-            '#fa5f86', // dark pink
-            '#ffab1a', // dark orange
-            '#fcda19', // dark yellow
-            '#797b80', // black
-            '#c9d96f', // pistacchio
-            '#47991f', // green #3
-            '#70edee', // turquoise
-            '#ff75ea'  // pink
+        return ['#68bdf6', '#6dce9e', '#faafc2', '#f2baf6', '#ff928c', '#fcea7e', '#ffc766', '#405f9e', '#a5abb6', '#78cecb', '#b88cbb', '#ced2d9', '#e84646', '#fa5f86', '#ffab1a', '#fcda19', '#797b80', '#c9d96f', '#47991f', '#70edee', '#ff75ea'
         ];
     }
 
@@ -528,7 +505,7 @@ const Neo4jD3 = (_selector, _options) => {
 
         container = d3.select(selector);
 
-        container.attr('class', 'neo4jd3')
+        container.attr('class', 'pdbd3')
             .html('')
         if (options.infoPanel) {
             info = appendInfoPanel(container);
@@ -538,12 +515,12 @@ const Neo4jD3 = (_selector, _options) => {
 
         simulation = initSimulation();
 
-        if (options.neo4jData) {
-            loadNeo4jData(options.neo4jData);
-        } else if (options.neo4jDataUrl) {
-            loadNeo4jDataFromUrl(options.neo4jDataUrl);
+        if (options.pdbData) {
+            loadPdbData(options.pdbData);
+        } else if (options.pdbDataUrl) {
+            loadPdbDataFromUrl(options.pdbDataUrl);
         } else {
-            console.error('Error: both neo4jData and neo4jDataUrl are empty!');
+            console.error('Error: both pdbData and pdbDataUrl are empty!');
         }
     }
 
@@ -605,23 +582,23 @@ const Neo4jD3 = (_selector, _options) => {
         return simulation;
     }
 
-    function loadNeo4jData() {
+    function loadPdbData() {
         nodes = [];
         relationships = [];
 
-        updateWithNeo4jData(options.neo4jData);
+        updateWithPdbData(options.pdbData);
     }
 
-    function loadNeo4jDataFromUrl(neo4jDataUrl) {
+    function loadPdbDataFromUrl(pdbDataUrl) {
         nodes = [];
         relationships = [];
 
-        d3.json(neo4jDataUrl, function (error, data) {
+        d3.json(pdbDataUrl, function (error, data) {
             if (error) {
                 throw error;
             }
 
-            updateWithNeo4jData(data);
+            updateWithPdbData(data);
         });
     }
 
@@ -631,7 +608,7 @@ const Neo4jD3 = (_selector, _options) => {
         });
     }
 
-    function neo4jDataToD3Data(data) {
+    function pdbDataToD3Data(data) {
         var graph = {
             nodes: [],
             relationships: []
@@ -929,8 +906,8 @@ const Neo4jD3 = (_selector, _options) => {
         updateNodesAndRelationships(d3Data.nodes, d3Data.relationships);
     }
 
-    function updateWithNeo4jData(neo4jData) {
-        graphData = neo4jDataToD3Data(neo4jData);
+    function updateWithPdbData(pdbData) {
+        graphData = pdbDataToD3Data(pdbData);
         updateWithD3Data(graphData);
     }
 
@@ -1019,11 +996,11 @@ const Neo4jD3 = (_selector, _options) => {
 
     return {
         appendRandomDataToNode: appendRandomDataToNode,
-        neo4jDataToD3Data: neo4jDataToD3Data,
+        pdbDataToD3Data: pdbDataToD3Data,
         randomD3Data: randomD3Data,
         size: size,
         updateWithD3Data: updateWithD3Data,
-        updateWithNeo4jData: updateWithNeo4jData,
+        updateWithPdbData: updateWithPdbData,
         version: version,
         getGraphData: getGraphData,
         zoomFit,
@@ -1031,4 +1008,4 @@ const Neo4jD3 = (_selector, _options) => {
     };
 }
 
-export default Neo4jD3
+export default PdbD3

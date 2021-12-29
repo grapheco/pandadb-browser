@@ -1,7 +1,7 @@
 const CompressionPlugin = require("compression-webpack-plugin")
 module.exports = {
   configureWebpack: config => {
-    if (process.env.NODE_ENV === 'production') { // 去掉console.log
+    if (process.env.NODE_ENV === 'production') {  
       config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
       config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
       config.optimization.minimizer[0].options.terserOptions.compress.drop_debugger = true
@@ -12,9 +12,9 @@ module.exports = {
       return {
         plugins: [
           new CompressionPlugin({
-            test: /\.js$|\.html$|\.css/, //匹配文件名
-            threshold: 10240,//对超过10k的数据压缩
-            deleteOriginalAssets: false //不删除源文件
+            test: /\.js$|\.html$|\.css/, 
+            threshold: 10240, 
+            deleteOriginalAssets: false  
           })
         ]
       }
@@ -36,5 +36,5 @@ module.exports = {
       },
     }
   },
-  lintOnSave: false,   // 取消 eslint 验证
+  lintOnSave: false,   
 }
