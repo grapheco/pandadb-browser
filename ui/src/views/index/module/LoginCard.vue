@@ -16,7 +16,7 @@
     </div>
     <div class="graph-main" v-if="isStretch">
       <div class="left">
-        <h1>Connect to Pandadb</h1>
+        <h1>Connect to PandaDB</h1>
         <p>Database access requires an authenticated connection.</p>
       </div>
       <div class="right">

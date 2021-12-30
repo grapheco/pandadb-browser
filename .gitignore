@@ -26,5 +26,6 @@ hs_err_pid*
 
 target
 .idea
+.iml
 nohup.out
 ui/dist
