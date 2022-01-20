@@ -25,8 +25,8 @@ import org.springframework.util.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 
 import cn.pandadb.browser.VO.PandadbConnectionInfo;
-import cn.pandadb.driver.PandaSession;
-import cn.pandadb.driver.PandaStatementResult;
+import org.grapheco.pandadb.driver.PandaSession;
+import org.grapheco.pandadb.driver.PandaStatementResult;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -65,7 +65,7 @@ public class PandaQueryTool {
         Set<String> nodeLabels = new HashSet<>();
         nodesCountByLabel.keySet().foreach(var -> nodeLabels.add(var));
 
-        scala.collection.immutable.Map<String, Object> relsCountByType = pandaSession.getStatistics().relsCountByType();
+        scala.collection.immutable.Map<String, Object> relsCountByType = pandaSession.getStatistics().relationsCountByType();
         Set<String> relTypes = new HashSet<>();
         relsCountByType.keySet().foreach(var -> relTypes.add(var));
 
