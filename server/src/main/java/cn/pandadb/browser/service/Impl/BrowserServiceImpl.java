@@ -1,14 +1,16 @@
 package cn.pandadb.browser.service.Impl;
 
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import cn.pandadb.browser.VO.ExecuteCypherVo;
 import cn.pandadb.browser.VO.PandadbConnectionInfo;
 import cn.pandadb.browser.service.BrowserService;
-import cn.pandadb.browser.utils.PandaQueryTool;
+import cn.pandadb.browser.utils.PandadbQueryTool;
+import cn.pandadb.browser.utils.PatternProcess;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class BrowserServiceImpl implements BrowserService {
@@ -21,12 +23,23 @@ public class BrowserServiceImpl implements BrowserService {
             throw new RuntimeException("pandadbUrl is null");
         }
 
-        PandaQueryTool pandaQueryTool = new PandaQueryTool(info);
         if (StringUtils.isEmpty(executeCypherVo.getCypher())) {
             throw new RuntimeException("cypher error");
         }
-        Map<String, Object> dataByCql = pandaQueryTool.getDataByCql(executeCypherVo.getCypher());
 
+        long start = new Date().getTime();
+        Map<String, Object> dataByCql = new HashMap<>();
+        try {
+            dataByCql = PatternProcess.getDataByCypher(info);
+        } catch (Exception e) {
+            e.printStackTrace();
+            dataByCql.put("errors", e.getMessage());
+        }
+
+        long end = new Date().getTime();
+
+        dataByCql.put("resultAvailableAfter", end - start);
+        dataByCql.put("resultConsumedAfter", end - start);
         return dataByCql;
     }
 
@@ -38,7 +51,7 @@ public class BrowserServiceImpl implements BrowserService {
         }
 
         PandadbConnectionInfo info = new PandadbConnectionInfo(executeCypherVo);
-        PandaQueryTool pandaQueryTool = new PandaQueryTool(info);
+        PandadbQueryTool pandaQueryTool = new PandadbQueryTool(info);
         return pandaQueryTool.getStatistics();
     }
 
